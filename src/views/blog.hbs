@@ -36,7 +36,7 @@
     <!-- NAV -->
     <nav class="navbar navbar-expand-lg bg-danger-subtle position-sticky top-0">
       <div class="container ">
-          <a class="navbar-brand" href="index.html"><img src="image/logo.png" alt="Dumbways" /></a>
+          <a class="navbar-brand" href="/"><img src="image/logo.png" alt="Dumbways" /></a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
               data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
               aria-label="Toggle navigation">
@@ -45,14 +45,14 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                   <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+                      <a class="nav-link active" aria-current="page" href="/">Home</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link" href="blog.html">Add Project</a>
+                      <a class="nav-link" href="/blog">Add Project</a>
                   </li>
               </ul>
               <form class="d-flex" role="search">
-                  <a class="btn btn-dark" href="contact.html">Contact Me</a>
+                  <a class="btn btn-dark" href="/contact">Contact Me</a>
               </form>
           </div>
       </div>
@@ -62,10 +62,10 @@
     <!-- Blog -->
     <div class="container my-5 justify-content-center" style="width: 40%;">
       <h2 class="text-center">Add My Project</h2>
-      <form>
+      <form action="/blog" method="post">
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
-          <input type="text" class="form-control" id="title" aria-describedby="emailHelp">
+          <input type="text" class="form-control" name="title" id="title" aria-describedby="emailHelp">
         </div>
 
         <div class="mb-3">
@@ -83,7 +83,7 @@
 
         <div class="mb-3">
           <label for="content" class="form-label">Content</label>
-          <textarea class="form-control" id="content" style="height: 200px; resize: none"></textarea>
+          <textarea class="form-control" name="content" id="content" style="height: 200px; resize: none"></textarea>
         </div>
 
         <div class="mb-3">
