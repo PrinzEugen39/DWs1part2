@@ -16,7 +16,11 @@ app.get("/blog", blog);
 app.post("/blog", addBlog);
 app.get("/blog-content/:id", blogcontent);
 
-app.listen(PORT);
+app.listen(PORT, () => {
+  console.log(`API listening on PORT ${PORT} `)
+});
+
+module.exports = app
 
 //index
 function home(req, res) {
