@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Card habib</title>
-    <link rel="icon" type="image" href="image/logo.png" />
+    <link rel="icon" type="image/png" href="https://www.google.com/s2/favicons?domain=dumbways.id"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -20,9 +20,11 @@
         href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
     <style>
+        html {
+            box-sizing: border-box;
+        }
         body {
             font-family: "Poppins", sans-serif;
-            overflow-x: hidden;
         }
     </style>
 </head>
@@ -108,73 +110,76 @@
     </div>
     <div class="d-flex justify-content-center px-5 text-bg-dark">
         <div class="row row-cols-1 row-cols-md-3 g-4 p-5 " style="width: 80%;">
+            {{#each dataFake}}
             <div class="col">
-              <div class="card h-100">
-                <img src="image/EtdRGSQVcAA4xXE.jpg" class="card-img-top p-3" alt="...">
-                <div class="card-body">
-                  <a class="text-decoration-none" href="/blog-content/446"><h5 class="card-title">Indomitable</h5></a>
-                  <p class="card-text"> 动态网自由门 天安門 天安门 法輪功 李洪志 Free Tibet 六四天安門事件
-                    The Tiananmen Square protests of 1989</p>
+                <div class="card h-100">
+                    <img src="{{this.image}}" class="card-img-top p-3" alt="...">
+                    <div class="card-body">
+                        <a class="text-decoration-none" href="/blog-content/{{@index}}">
+                            <h5 class="card-title">{{this.title}}</h5>
+                        </a>
+                        <p class="card-text">{{this.content}}</p>
+                    </div>
+                    <div class="ms-3">
+                        <i class="fa-brands fa-google-play fa-lg"></i>
+                        <i class="fa-brands fa-android fa-lg"></i>
+                        <i class="fa-brands fa-java fa-lg"></i>
+                    </div>
+                    <div class="d-flex justify-content-center my-4">
+                        <a class="btn btn-dark me-3" href="/edit/{{@index}}">Edit</a>
+                        <a class="btn btn-dark" href="/delete/{{@index}}">Delete</a>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-body-secondary">{{this.postedAt}}</small>
+                    </div>
                 </div>
-                <div class="ms-3">
-                    <i class="fa-brands fa-google-play fa-lg"></i>
-                    <i class="fa-brands fa-android fa-lg"></i>
-                    <i class="fa-brands fa-java fa-lg"></i>
-                  </div>
-                <div class="d-flex justify-content-center my-4">
-                    <a class="btn btn-dark me-3" href="#">Edit</a>
-                    <a class="btn btn-dark" href="#">Delete</a>
+            </div>
+            {{/each}}
+            {{!-- <div class="col">
+                <div class="card h-100">
+                    <img src="image/EVfBp4yU8AEVisy.jpg" class="card-img-top p-3" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Marseille</h5>
+                        <p class="card-text">BING CHILLING 🥶🍦 wǒ hěn
+                            xǐhuān BING CHILLING 🥶🍦</p>
+                    </div>
+                    <div class="ms-3">
+                        <i class="fa-brands fa-google-play fa-lg"></i>
+                        <i class="fa-brands fa-android fa-lg"></i>
+                        <i class="fa-brands fa-java fa-lg"></i>
+                    </div>
+                    <div class="d-flex justify-content-center my-4">
+                        <a class="btn btn-dark me-3" href="#">Edit</a>
+                        <a class="btn btn-dark" href="#">Delete</a>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-body-secondary">Durasi 3 minggu</small>
+                    </div>
                 </div>
-                <div class="card-footer">
-                  <small class="text-body-secondary">Durasi 4 bulan</small>
-                </div>
-              </div>
             </div>
             <div class="col">
-              <div class="card h-100">
-                <img src="image/EVfBp4yU8AEVisy.jpg" class="card-img-top p-3" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">Marseille</h5>
-                  <p class="card-text">BING CHILLING 🥶🍦 wǒ hěn
-                    xǐhuān BING CHILLING 🥶🍦</p>
+                <div class="card h-100">
+                    <img src="image/Screenshot (33).png" class="card-img-top p-3" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Petropavlovsk</h5>
+                        <p class="card-text"> Super Idol的笑容都没你的甜八月正午的阳光都 没你耀眼热爱 105
+                            °C</p>
+                    </div>
+                    <div class="ms-3">
+                        <i class="fa-brands fa-google-play fa-lg"></i>
+                        <i class="fa-brands fa-android fa-lg"></i>
+                        <i class="fa-brands fa-java fa-lg"></i>
+                    </div>
+                    <div class="d-flex justify-content-center my-4">
+                        <a class="btn btn-dark me-3" href="#">Edit</a>
+                        <a class="btn btn-dark" href="#">Delete</a>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-body-secondary">Durasi 1 Tahun</small>
+                    </div>
                 </div>
-                <div class="ms-3">
-                    <i class="fa-brands fa-google-play fa-lg"></i>
-                    <i class="fa-brands fa-android fa-lg"></i>
-                    <i class="fa-brands fa-java fa-lg"></i>
-                  </div>
-                <div class="d-flex justify-content-center my-4">
-                    <a class="btn btn-dark me-3" href="#">Edit</a>
-                    <a class="btn btn-dark" href="#">Delete</a>
-                </div>
-                <div class="card-footer">
-                  <small class="text-body-secondary">Durasi 3 minggu</small>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="card h-100">
-                <img src="image/Screenshot (33).png" class="card-img-top p-3" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">Petropavlovsk</h5>
-                  <p class="card-text"> Super Idol的笑容都没你的甜八月正午的阳光都 没你耀眼热爱 105
-                    °C</p>
-                </div>
-                <div class="ms-3">
-                    <i class="fa-brands fa-google-play fa-lg"></i>
-                    <i class="fa-brands fa-android fa-lg"></i>
-                    <i class="fa-brands fa-java fa-lg"></i>
-                  </div>
-                <div class="d-flex justify-content-center my-4">
-                    <a class="btn btn-dark me-3" href="#">Edit</a>
-                    <a class="btn btn-dark" href="#">Delete</a>
-                </div>
-                <div class="card-footer">
-                  <small class="text-body-secondary">Durasi 1 Tahun</small>
-                </div>
-              </div>
-            </div>
-          </div>    
+            </div> --}}
+        </div>
     </div>
     <script>
         const currentPage = window.location.pathname.split("/").pop();
