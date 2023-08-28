@@ -17,8 +17,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
     crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="css/navbar.css" />
-    <link rel="stylesheet" href="css/blog.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -36,7 +34,7 @@
     <!-- NAV -->
     <nav class="navbar navbar-expand-lg bg-danger-subtle position-sticky top-0">
       <div class="container ">
-          <a class="navbar-brand" href="/"><img src="image/logo.png" alt="Dumbways" /></a>
+          <a class="navbar-brand" href="/"><img src="/image/logo.png" alt="Dumbways" /></a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
               data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
               aria-label="Toggle navigation">
@@ -62,7 +60,7 @@
     <!-- Blog -->
     <div class="container my-5 justify-content-center" style="width: 40%;">
       <h2 class="text-center">Edit My Project</h2>
-      <form action="/updateBlog" method="post">
+      <form  method="post" action="/edit-blog/{{id}}">
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
           <input type="text" class="form-control" name="title" id="title" value="{{blog.title}}" aria-describedby="emailHelp">
