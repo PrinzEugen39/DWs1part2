@@ -8,7 +8,7 @@ app.set("views", path.join(__dirname, "src/views/"));
 
 app.use(express.static(path.join(__dirname, "src/assets")));
 app.use(express.urlencoded({ extended: false }));
-
+//data dummy
 const dataFake = [
   {
     title: "Lucky 7",
@@ -19,26 +19,27 @@ const dataFake = [
   {
     title: "SATORARE",
     image: "https://iili.io/HpOX1cb.md.png",
-    content: "Genius is one percent inspiration and ninety-nine percent perspiration.",
+    content: "For <button>, <input> and <option> elements, the value attribute specifies the initial value of the element.",
     postedAt: new Date()
   },
   {
     title: "Viva Evolution",
     image: "https://iili.io/HpOXaV9.md.png",
-    content: "Genius is one percent inspiration and ninety-nine percent perspiration.",
+    content: "SIDE SPLITTING. UNHOLY PINNACLE OF PAIN. you will laugh but i will cry",
     postedAt: new Date()
   }
 ];
 
-//GET
+//GET and POST methods
 app.get("/", home);
 app.get("/contact", contact);
 app.get("/blog-content/:id", blogcontent);
 app.get("/blog", blog);
 app.post("/blog", addBlog);
 app.get("/delete/:id", deleteBlog);
-app.get("/edit/:id", editBlog);
-app.post("/update/:id", updateBlog)
+app.get("/edit-blog/:id", editBlog);
+app.post("/updateBlog")
+
 
 app.listen(PORT, () => {
   console.log(`API listening on PORT ${PORT} `)
@@ -77,6 +78,12 @@ function addBlog(req, res) {
 
   res.redirect("/");
 }
+//edit blog
+function editBlog(req, res) {
+  const {id} = req.params;
+
+  res.render("edit-blog", { blog: dataFake[id]});
+}
 
 //data dummy
 function blogcontent(req, res) {
@@ -93,21 +100,15 @@ function deleteBlog(req, res) {
   res.redirect("/");
 }
 
-//edit blog 
-function editBlog(req, res) {
-  const { id } = req.params;
-  res.render("edit", { blog: dataFake[id], blogIndex: id });
-}
+// function updateBlog(req, res) {
+// 	const {blogIndex} = req.body;
+// 	const { title, content } = req.body;
 
-function updateBlog(req, res) {
-	const {blogIndex} = req.body;
-	const { title, content } = req.body;
+// 	dataBlog[blogIndex].title = title;
+// 	dataBlog[blogIndex].content = content;
 
-	dataBlog[blogIndex].title = title;
-	dataBlog[blogIndex].content = content;
-
-	res.redirect("/");
-}
+// 	res.redirect("/");
+// }
 
 // arr.push()
 // const num = 9

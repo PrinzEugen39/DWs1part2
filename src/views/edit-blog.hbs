@@ -62,10 +62,10 @@
     <!-- Blog -->
     <div class="container my-5 justify-content-center" style="width: 40%;">
       <h2 class="text-center">Edit My Project</h2>
-      <form action="/blog" method="post">
+      <form action="/updateBlog" method="post">
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
-          <input type="text" class="form-control" name="title" id="title" aria-describedby="emailHelp">
+          <input type="text" class="form-control" name="title" id="title" value="{{blog.title}}" aria-describedby="emailHelp">
         </div>
 
         <div class="mb-3">
@@ -83,7 +83,7 @@
 
         <div class="mb-3">
           <label for="content" class="form-label">Content</label>
-          <textarea class="form-control" name="content" id="content" style="height: 200px; resize: none"></textarea>
+          <textarea class="form-control" name="content" id="content" value="" style="height: 200px; resize: none">{{blog.content}}</textarea>
         </div>
 
         <div class="mb-3">
