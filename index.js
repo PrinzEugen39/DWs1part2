@@ -42,14 +42,6 @@ app.post("/blog", addBlog);
 app.get("/delete/:id", deleteBlog);
 app.get("/edit-blog/:id", editBlog);
 app.post("/edit-blog/:id", updateBlog);
-function updateBlog(req, res) {
-  const { id } = req.params;
-  const { title, content } = req.body;
-  dataFake[id].title = title;
-  dataFake[id].content = content;
-  
-  res.redirect("/");
-}
 
 app.listen(PORT, () => {
   console.log(`API listening on PORT ${PORT} `);
@@ -88,11 +80,18 @@ function addBlog(req, res) {
   res.redirect("/");
 }
 //edit blog
-function editBlog(req, res) {
-  const { id } = req.params;
-  console.log(dataFake[id]);
-  res.render("edit-blog", { blog: dataFake[id], id });
-}
+    function editBlog(req, res) {
+      const { id } = req.params;
+      res.render("edit-blog", { blog: dataFake[id], id });
+    }
+    function updateBlog(req, res) {
+      const { id } = req.params;
+      const { title, content } = req.body;
+      dataFake[id].title = title;
+      dataFake[id].content = content;
+      
+      res.redirect("/");
+    }
 
 //data dummy
 function blogcontent(req, res) {
