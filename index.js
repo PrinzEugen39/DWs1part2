@@ -15,21 +15,39 @@ const dataFake = [
     image: "https://iili.io/HpOXYo7.md.jpg",
     content:
       "Genius is one percent inspiration and ninety-nine percent perspiration.",
-    postedAt: new Date(),
+    startDate: "2023-08-01",
+    endDate: "2023-08-10",
+    duration: "2 Bulan",
+    JS: false,
+    nodeJS: false,
+    expressJS: true,
+    reactJS: false,
   },
   {
     title: "SATORARE",
     image: "https://iili.io/HpOX1cb.md.png",
     content:
       "For <button>, <input> and <option> elements, the value attribute specifies the initial value of the element.",
-    postedAt: new Date(),
+      startDate: "2023-08-01",
+      endDate: "2023-08-10",
+      duration: "1 Bulan",
+      JS: true,
+      nodeJS: true,
+      expressJS: false,
+      reactJS: true,
   },
   {
     title: "Viva Evolution",
     image: "https://iili.io/HpOXaV9.md.png",
     content:
       "SIDE SPLITTING. UNHOLY PINNACLE OF PAIN. you will laugh but i will cry",
-    postedAt: new Date(),
+      startDate: "2023-08-01",
+      endDate: "2023-08-10",
+      duration: "3 Minggu",
+      JS: true,
+      nodeJS: true,
+      expressJS: true,
+      reactJS: true,
   },
 ];
 
@@ -66,13 +84,53 @@ function contact(req, res) {
 
 //add a new project
 function addBlog(req, res) {
-  const { title, content } = req.body;
+  const {
+  title, 
+  content,
+  startDate,
+  endDate,
+  JS,
+  nodeJS,
+  expressJS,
+  reactJS,
+  } = req.body;
+  let start = new Date(startDate);
+  let end = new Date(endDate);
+  if (start > end) {
+    return alert("End date should be greater than start date");
+  }
+  //duration
+  let durationDiff = end.getTime() - start.getTime();
+  let day = durationDiff / (1000 * 3600 * 24);
+  let week = Math.floor(day / 7);
+  let month = Math.floor(week / 4);
+  let year = Math.floor(month / 12);
+  let duration = " ";
+
+  if (day > 0 ){
+    duration = day + " Day";
+  }
+  if (week > 0){
+    duration = week + " Week";
+  }
+  if (month > 0){
+    duration = month + " Month";
+  } 
+  if (year > 0){
+    duration = year + " Year";
+  }
 
   const data = {
     title,
     content,
     image: "image/ripiuw/DONTLETYOUDOWN.png",
-    postedAt: new Date(),
+    startDate,
+    endDate,
+    duration,
+    JS,
+    nodeJS,
+    expressJS,
+    reactJS,
   };
 
   dataFake.push(data);
@@ -86,9 +144,49 @@ function addBlog(req, res) {
     }
     function updateBlog(req, res) {
       const { id } = req.params;
-      const { title, content } = req.body;
+      const { 
+        title, 
+        content,
+        startDate,
+        endDate,
+        JS,
+        nodeJS,
+        expressJS,
+        reactJS,
+      } = req.body;
+      let start = new Date(startDate);
+      let end = new Date(endDate);
+      if (start > end) {
+        return alert("End date should be greater than start date");
+      }
+      //duration
+      let durationDiff = end.getTime() - start.getTime();
+      let day = durationDiff / (1000 * 3600 * 24);
+      let week = Math.floor(day / 7);
+      let month = Math.floor(week / 4);
+      let year = Math.floor(month / 12);
+      let duration = " ";
+    
+      if (day > 0 ){
+        duration = day + " Day";
+      }
+      if (week > 0){
+        duration = week + " Week";
+      }
+      if (month > 0){
+        duration = month + " Month";
+      } 
+      if (year > 0){
+        duration = year + " Year";
+      }
+
       dataFake[id].title = title;
       dataFake[id].content = content;
+      dataFake[id].JS = JS;
+      dataFake[id].nodeJS = nodeJS;
+      dataFake[id].expressJS = expressJS;
+      dataFake[id].reactJS = reactJS;
+      dataFake[id].duration = duration;
       
       res.redirect("/");
     }
@@ -108,31 +206,6 @@ function deleteBlog(req, res) {
   res.redirect("/");
 }
 
-// function updateBlog(req, res) {
-
-//   const { title, content } = req.body;
-//   const id = req.params; // The index of the blog in the dataFake array
-//   const data = {
-//     title,
-//     content,
-//     image: "image/ripiuw/DONTLETYOUDOWN.png",
-//     postedAt: new Date(),
-//   };
-//   console.log(data);
-//   // Update the blog data
-
-//   dataFake.push(id, 1, data);
-//   res.redirect("/");
-// }
-
-// function updateBlog(req, res) {
-//   const { title, content} = req.body;
-//   const { id } = req.params;
-
-
-
-// 	res.redirect("/");
-// }
 
 // arr.push()
 // const num = 9
