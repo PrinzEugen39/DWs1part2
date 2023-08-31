@@ -115,31 +115,33 @@
                 <div class="card h-100">
                     <img src="{{this.image}}" class="card-img-top p-3" alt="...">
                     <div class="card-body">
-                        <a class="text-decoration-none text-dark" href="/blog-content/{{@index}}">
+                        <a class="text-decoration-none text-dark" href="/blog-content/{{this.id}}">
                             <h5 class="card-title fs-3">{{this.title}}</h5>
                         </a>
                         <p class="card-text">{{this.content}}</p>
                     </div>
                     <div class="ms-3">
-                        {{#if this.JS}}
+                        {{!-- {{#if (getArrayElement this.technologies 0)}}
+                         --}}
+                        {{#if this.js}}
                         <i class="fa-brands fa-square-js fa-lg"></i>
                         {{/if}}
-                        {{#if this.nodeJS}}
+                        {{#if this.nodejs}}
                         <i class="fa-brands fa-node fa-lg"></i>
                         {{/if}}
-                        {{#if this.expressJS}}
+                        {{#if this.expressjs}}
                         <i class="fa-brands fa-html5 fa-lg"></i>
                         {{/if}}
-                        {{#if this.reactJS}}
+                        {{#if this.reactjs}}
                         <i class="fa-brands fa-react fa-lg"></i>
                         {{/if}}
                     </div>
                     <div class="d-flex justify-content-center my-4">
-                        <a class="btn btn-dark me-3" href="/edit-blog/{{@index}}">Edit</a>
-                        <a class="btn btn-dark" href="/delete/{{@index}}">Delete</a>
+                        <a class="btn btn-dark me-3" href="/edit-blog/{{this.id}}">Edit</a>
+                        <a class="btn btn-dark" href="/delete/{{this.id}}">Delete</a>
                     </div>
                     <div class="card-footer">
-                        <small class="text-body-secondary">Duration: {{this.duration}}</small>
+                        <small class="text-body-secondary">Duration: {{this.duration}} | {{this.author}}</small>
                     </div>
                 </div>
             </div>

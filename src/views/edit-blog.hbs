@@ -61,28 +61,28 @@
     <!-- Blog -->
     <div class="container my-5 justify-content-center" style="width: 40%;">
       <h2 class="text-center">Edit My Project</h2>
-      <form  method="post" action="/edit-blog/{{id}}">
+      <form  method="post" action="/edit-blog/{{dataFake.id}}">
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
-          <input type="text" class="form-control" name="title" id="title" value="{{blog.title}}" aria-describedby="emailHelp">
+          <input type="text" class="form-control" name="title" id="title" value="{{dataFake.title}}" aria-describedby="emailHelp">
         </div>
 
         <div class="mb-3">
           <div class="row">
             <div class="col">
               <label for="startdate" class="form-label">Start Date</label>
-              <input type="date" class="form-control" name="startDate" id="startdate">
+              <input type="date" class="form-control" name="startDate" id="startdate" value="{{dataFake.startDate}}">
             </div>
             <div class="col">
               <label for="enddate" class="form-label">End Date</label>
-              <input type="date" class="form-control" name="endDate" id="enddate">
+              <input type="date" class="form-control" name="endDate" id="enddate" value="{{dataFake.endDate}}">
             </div>
           </div>
         </div>
 
         <div class="mb-3">
           <label for="content" class="form-label">Content</label>
-          <textarea class="form-control" name="content" id="content" value="" style="height: 200px; resize: none">{{blog.content}}</textarea>
+          <textarea class="form-control" name="content" id="content" value="" style="height: 200px; resize: none">{{dataFake.content}}</textarea>
         </div>
 
        <div class="mb-3">
