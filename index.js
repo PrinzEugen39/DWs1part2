@@ -16,48 +16,6 @@ app.set("views", path.join(__dirname, "src/views/"));
 app.use(express.static(path.join(__dirname, "src/assets")));
 //parsing data from client
 app.use(express.urlencoded({ extended: false }));
-//data dummy
-const dataFake = [
-  {
-    title: "Lucky 7",
-    image: "https://iili.io/HpOXYo7.md.jpg",
-    content:
-      "Genius is one percent inspiration and ninety-nine percent perspiration.",
-    startDate: "2023-08-01",
-    endDate: "2023-08-10",
-    duration: "2 Bulan",
-    JS: false,
-    nodeJS: false,
-    expressJS: true,
-    reactJS: false,
-  },
-  {
-    title: "SATORARE",
-    image: "https://iili.io/HpOX1cb.md.png",
-    content:
-      "For <button>, <input> and <option> elements, the value attribute specifies the initial value of the element.",
-    startDate: "2023-08-01",
-    endDate: "2023-08-10",
-    duration: "1 Bulan",
-    JS: true,
-    nodeJS: true,
-    expressJS: false,
-    reactJS: true,
-  },
-  {
-    title: "Viva Evolution",
-    image: "https://iili.io/HpOXaV9.md.png",
-    content:
-      "SIDE SPLITTING. UNHOLY PINNACLE OF PAIN. you will laugh but i will cry",
-    startDate: "2023-08-01",
-    endDate: "2023-08-10",
-    duration: "3 Minggu",
-    JS: true,
-    nodeJS: true,
-    expressJS: true,
-    reactJS: true,
-  },
-];
 
 //GET and POST methods
 app.get("/", home);
