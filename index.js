@@ -3,6 +3,9 @@ const app = express();
 const PORT = 5000;
 const path = require("path");
 const moment= require("moment")
+const bcrypt = require("bcrypt");
+const session = require("express-session");
+const flash = require("express-flash");
 
 //sequelize init
 const config = require("./src/config/config.json");
@@ -17,15 +20,21 @@ app.use(express.static(path.join(__dirname, "src/assets")));
 //parsing data from client
 app.use(express.urlencoded({ extended: false }));
 
-//GET and POST methods
+//GET routing
 app.get("/", home);
 app.get("/contact", contact);
-app.get("/blog-content/:id", blogcontent);
 app.get("/blog", blog);
-app.post("/blog", addBlog);
-app.get("/delete/:id", deleteBlog);
+app.get("/blog-content/:id", blogcontent);
 app.get("/edit-blog/:id", editBlog);
+app.get("/delete/:id", deleteBlog);
+app.get("/login", login);
+app.get("/register", register);
+
+//POST routing
+app.post("/blog", addBlog);
 app.post("/edit-blog/:id", updateBlog);
+app.post("/register", registerUser);
+app.post("/login", loginUser)
 
 app.listen(PORT, () => {
   console.log(`API listening on PORT ${PORT} `);
@@ -145,6 +154,42 @@ async function deleteBlog(req, res) {
     await sequelize.query(`DELETE FROM "Blogs" WHERE id=${id}`);
 
     res.redirect("/");
+  } catch (error) {
+    console.log(error);
+  }
+}
+function login (req, res) {
+  res.render('login')
+}
+
+async function loginUser (req, res) {
+  try {
+    const { email, password } = req.body;
+    const query = `SELECT * FROM "Users" WHERE email = '${email}'`
+    let obj = await sequelize.query(query, { type: QueryTypes.SELECT })
+    console.log(obj)
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function register (req, res) {
+  res.render('register')
+}
+
+async function registerUser(req, res) {
+  try {
+    const { name, email, password } = req.body;
+    const salt = 10;
+    // if(email.length != 0) {
+    //   return alert ("email sudah ada")
+    // }
+
+    await bcrypt.hash(password, salt, (err, hashPw) => {
+      const query = `INSERT INTO "Users" (name, email, password, "createdAt", "updatedAt") VALUES ('${name}', '${email}', '${hashPw}', NOW(), NOW())`
+      sequelize.query(query)
+    });
+    // await console.log(name, email, pw);
   } catch (error) {
     console.log(error);
   }
