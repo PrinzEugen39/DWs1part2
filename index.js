@@ -4,12 +4,14 @@ const PORT = 5000;
 const path = require("path");
 const moment= require("moment")
 const bcrypt = require("bcrypt");
-const session = require("express-session");
-const flash = require("express-flash");
+// const session = require("express-session");
+// const flash = require("express-flash");
+// const upload = require(".src/middleware/uploadFiles.js");
 
 //sequelize init
 const config = require("./src/config/config.json");
 const { Sequelize, QueryTypes } = require("sequelize");
+const { type } = require("os");
 const sequelize = new Sequelize(config.development);
 
 //hbs endpoint
@@ -75,12 +77,19 @@ async function addBlog(req, res) {
     const { title, content, startDate, endDate } = req.body;
     const image = "https://iili.io/HpOXaV9.md.png";
 
-    const query = `INSERT INTO "Blogs" (title, content, image, duration, "startDate", "endDate", js, nodejs, expressjs, reactjs, author, "postAt", "createdAt", "updatedAt") VALUES ('${title}', '${content}', '${image}', '${dateDuration(
+    const query = `INSERT INTO "Blogs" (title, content, image, duration, "startDate", "endDate", js, nodejs, expressjs, reactjs, "postAt", "createdAt", "updatedAt") VALUES ('${title}', '${content}', '${image}', '${dateDuration(
       startDate,
       endDate
-    )}','${startDate}', '${endDate}', true, true, true, true, 'PrinzEugen39', NOW(), NOW(), NOW())`;
+    )}','${startDate}', '${endDate}', :js, :nodejs, :expressjs, :reactjs, NOW(), NOW(), NOW())`;
 
-    await sequelize.query(query);
+    await sequelize.query(query, {
+      replacements : {
+        js: req.body.js ? true : false,
+        nodejs: req.body.nodejs ? true : false,
+        expressjs: req.body.expressjs ? true : false,
+        reactjs: req.body.reactjs ? true : false,
+      }, type: QueryTypes.INSERT
+    });
 
     res.redirect("/");
   } catch (error) {
@@ -99,6 +108,7 @@ async function addBlog(req, res) {
           startDate: moment(res.startDate).format('YYYY-MM-DD'),
           endDate: moment(res.endDate).format('YYYY-MM-DD')
         }));
+
         res.render("edit-blog", { dataFake: data[0] });
       } catch (error) {
         console.log(error);
@@ -107,7 +117,7 @@ async function addBlog(req, res) {
     async function updateBlog(req, res) {
       try {
         const { id } = req.params;
-        const { title, content, startDate, endDate } =
+        const { title, content, startDate, endDate} =
           req.body;
         
         const query = `UPDATE "Blogs" SET
@@ -116,12 +126,21 @@ async function addBlog(req, res) {
         "startDate" = '${startDate}',
         "endDate" = '${endDate}',
         duration = '${dateDuration(startDate, endDate)}',
-        "postAt" = NOW(),
         "updatedAt" = NOW(),
-        "createdAt" = NOW()
+        js=:js,
+        nodejs=:nodejs,
+        expressjs=:expressjs,
+        reactjs=:reactjs  
         WHERE id = '${id}'`;
   
-        await sequelize.query(query,);
+        await sequelize.query(query, {
+          replacements: {
+            js: req.body.js ? true : false,
+            nodejs: req.body.nodejs ? true : false,
+            expressjs: req.body.expressjs ? true : false,
+            reactjs: req.body.reactjs ? true : false,
+          }, type: QueryTypes.UPDATE
+        });
   
         res.redirect("/");
         

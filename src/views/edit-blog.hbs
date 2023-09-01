@@ -83,31 +83,46 @@
         <div class="mb-3">
           <label for="content" class="form-label">Content</label>
           <textarea class="form-control" name="content" id="content" value="" style="height: 200px; resize: none">{{dataFake.content}}</textarea>
-        </div>
-
+        </div>    
        <div class="mb-3">
           <label for="" class="form-label">Technologies</label>
           <div class="ms-4 form-check">
-            <input class="form-check-input" type="checkbox" value="JS" name="JS" id="checkbokJS">
+             {{#if dataFake.js}}  
+            <input class="form-check-input" type="checkbox" value="js" name="js" id="checkbokJS" checked>
+            {{else}}
+            <input class="form-check-input" type="checkbox" value="js" name="js" id="checkbokJS">
+            {{/if}}
             <label class="form-check-label" for="checkbokJS">
               Javascript
             </label>
           </div>
           <div class="ms-4 form-check">
-            <input class="form-check-input" type="checkbox" value="nodeJS" name="nodeJS" id="checkbokNodeJS">
+            {{#if dataFake.nodejs}}
+            <input class="form-check-input" type="checkbox" value="nodejs" name="nodejs" id="checkbokNodeJS" checked>
+            {{else}}
+            <input class="form-check-input" type="checkbox" value="nodejs" name="nodejs" id="checkbokNodeJS">
+            {{/if}}
             <label class="form-check-label" for="checkbokNodeJS">
               NodeJS
             </label>
           </div>
           <div class="ms-4 form-check">
-            <input class="form-check-input" type="checkbox" value="expressJS" name="expressJS" id="checkboxExpressJS">
+            {{#if dataFake.expressjs}}            
+            <input class="form-check-input" type="checkbox" value="expressjs" name="expressjs" id="checkboxExpressJS" checked>
+            {{else}}
+            <input class="form-check-input" type="checkbox" value="expressjs" name="expressjs" id="checkboxExpressJS">
+            {{/if}}
             <label class="form-check-label" for="checkboxExpressJS">
               ExpressJS
             </label>
           </div>
           <div class="ms-4 form-check">
-            <input class="form-check-input" type="checkbox" value="reactJS" name="reactJS" id="checkbokReactJS">
-            <label class="form-check-label" for="ReactJS">
+            {{#if dataFake.reactjs}}
+            <input class="form-check-input" type="checkbox" value="reactjs" name="reactjs" id="checkbokReactJS" checked>
+            {{else}}
+            <input class="form-check-input" type="checkbox" value="reactjs" name="reactjs" id="checkbokReactJS">
+            {{/if}}
+            <label class="form-check-label" for="checkbokReactJS">
               ReactJS
             </label>
           </div>
