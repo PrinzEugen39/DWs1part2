@@ -66,7 +66,7 @@
     background-color: rgba(255, 255, 255, 0.025);
     box-shadow: 0px 10px 10px 10px rgba(0, 0, 0, 0.2);">
       <h2 class="text-center">Edit My Project</h2>
-      <form  method="post" action="/edit-blog/{{dataFake.id}}">
+      <form  method="post" action="/edit-blog/{{dataFake.id}}" enctype="multipart/form-data">
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
           <input type="text" class="form-control" name="title" id="title" value="{{dataFake.title}}" aria-describedby="emailHelp">
@@ -135,7 +135,8 @@
 
         <div class="mb-3">
           <label for="uploadimage" class="form-label">Upload Image</label>
-          <input type="file" class="form-control" name="upload-image" id="uploadimage" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+          <input type="file" class="form-control" name="upload-image" id="uploadimage" aria-describedby="inputGroupFileAddon04" aria-label="Upload" onchange="PreviewImage();">
+          <img id="uploadPreview" style="width: 0px; height: 0px;" />  
         </div>
 
         <div class="d-flex justify-content-end mt-5">
@@ -143,6 +144,21 @@
         </div>
       </form>
     </div>
+    <script type="text/javascript">
+    function PreviewImage() {
+      var oFReader = new FileReader();
+      oFReader.readAsDataURL(document.getElementById("uploadimage").files[0]);
+
+      oFReader.onload = function (oFREvent) {
+        document.getElementById("uploadPreview").src = oFREvent.target.result;
+        let pic = document.getElementById("uploadPreview")
+        pic.style.width = "50%";
+        pic.style.height = "10rem";
+        pic.style.marginTop = "1rem";
+        pic.style.borderRadius = "1rem";
+      };
+    };
+  </script>
   </body>
 
 </html>

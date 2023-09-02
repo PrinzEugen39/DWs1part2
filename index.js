@@ -36,7 +36,7 @@ app.get("/register", register);
 
 //POST routing
 app.post("/blog", upload.single('upload-image'),addBlog);
-app.post("/edit-blog/:id", updateBlog);
+app.post("/edit-blog/:id", upload.single('upload-image'), updateBlog);
 app.post("/register", registerUser);
 app.post("/login", loginUser)
 
@@ -116,15 +116,27 @@ async function addBlog(req, res) {
         console.log(error);
       }
     }
+    const fs = require("fs");
     async function updateBlog(req, res) {
       try {
         const { id } = req.params;
-        const { title, content, startDate, endDate} =
-          req.body;
+        const { title, content, startDate, endDate} =req.body;
+        const image = req.file ? req.file.filename: null;
+
+        // Get old image dari uploads
+        const oldImage = `SELECT image FROM "Blogs" WHERE id = '${id}'`;
+        const [oldImageResult] = await sequelize.query(oldImage);
+        const oldImageFilename = oldImageResult[0].image;
+
+        // Delete old image dari uploads jika ada diganti dengan image baru
+        if (image) {
+          fs.unlinkSync(`src/uploads/${oldImageFilename}`);
+        }
         
         const query = `UPDATE "Blogs" SET
         title = '${title}',
         content = '${content}',
+        ${image ? `image = '${image}',` : ''}
         "startDate" = '${startDate}',
         "endDate" = '${endDate}',
         duration = '${dateDuration(startDate, endDate)}',
