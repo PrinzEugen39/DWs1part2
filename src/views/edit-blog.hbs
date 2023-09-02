@@ -59,7 +59,12 @@
 
 
     <!-- Blog -->
-    <div class="container my-5 justify-content-center" style="width: 40%;">
+    <div class="container my-5 justify-content-center"
+    style="width: 45%;
+    border-radius: 10px;
+    padding: 30px 80px;
+    background-color: rgba(255, 255, 255, 0.025);
+    box-shadow: 0px 10px 10px 10px rgba(0, 0, 0, 0.2);">
       <h2 class="text-center">Edit My Project</h2>
       <form  method="post" action="/edit-blog/{{dataFake.id}}">
         <div class="mb-3">
@@ -130,7 +135,7 @@
 
         <div class="mb-3">
           <label for="uploadimage" class="form-label">Upload Image</label>
-          <input type="file" class="form-control" name="image" id="uploadimage" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+          <input type="file" class="form-control" name="upload-image" id="uploadimage" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
         </div>
 
         <div class="d-flex justify-content-end mt-5">

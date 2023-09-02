@@ -6,7 +6,7 @@ const moment= require("moment")
 const bcrypt = require("bcrypt");
 // const session = require("express-session");
 // const flash = require("express-flash");
-// const upload = require(".src/middleware/uploadFiles.js");
+const upload = require("./src/middleware/uploadFiles");
 
 //sequelize init
 const config = require("./src/config/config.json");
@@ -14,11 +14,13 @@ const { Sequelize, QueryTypes } = require("sequelize");
 const { type } = require("os");
 const sequelize = new Sequelize(config.development);
 
+
 //hbs endpoint
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "src/views/"));
 //static file endpoint
 app.use(express.static(path.join(__dirname, "src/assets")));
+app.use(express.static(path.join(__dirname, "src/uploads")));
 //parsing data from client
 app.use(express.urlencoded({ extended: false }));
 
@@ -33,7 +35,7 @@ app.get("/login", login);
 app.get("/register", register);
 
 //POST routing
-app.post("/blog", addBlog);
+app.post("/blog", upload.single('upload-image'),addBlog);
 app.post("/edit-blog/:id", updateBlog);
 app.post("/register", registerUser);
 app.post("/login", loginUser)
@@ -47,7 +49,7 @@ module.exports = app;
 //index
 async function home(req, res) {
   try {
-    const query = `SELECT * FROM "Blogs"`;
+    const query = `SELECT * FROM "Blogs" ORDER BY id ASC`;
     let obj = await sequelize.query(query, { type: QueryTypes.SELECT });
 
     const data = obj.map((res) => ({
@@ -75,7 +77,7 @@ function contact(req, res) {
 async function addBlog(req, res) {
   try {
     const { title, content, startDate, endDate } = req.body;
-    const image = "https://iili.io/HpOXaV9.md.png";
+    const image = req.file.filename;
 
     const query = `INSERT INTO "Blogs" (title, content, image, duration, "startDate", "endDate", js, nodejs, expressjs, reactjs, "postAt", "createdAt", "updatedAt") VALUES ('${title}', '${content}', '${image}', '${dateDuration(
       startDate,
