@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Card habib</title>
-    <link rel="icon" type="image/png" href="https://www.google.com/s2/favicons?domain=dumbways.id"/>
+    <link rel="icon" type="image/png" href="https://www.google.com/s2/favicons?domain=dumbways.id" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -23,6 +23,7 @@
         html {
             box-sizing: border-box;
         }
+
         body {
             font-family: "Poppins", sans-serif;
         }
@@ -44,18 +45,28 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/">Home</a>
                     </li>
+                    {{#if loginCheck.isLogin}}
                     <li class="nav-item">
                         <a class="nav-link" href="/blog">Add Project</a>
                     </li>
+                    {{/if}}
                 </ul>
                 <form class="d-flex" role="search">
                     <ul class="navbar-nav nav-underline me-3 mb-2 mb-lg-0">
+                        {{#if loginCheck.isLogin}}
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Hello, {{loginCheck.user}}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="/logout">Logout</a>
+                        </li>
+                        {{else}}
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="/login">Login</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/register">Register</a>
-                        </li>
+                            {{/if}}
                         <li class="nav-item">
                             <a class="btn btn-dark" href="/contact">Contact Me</a>
                         </li>
@@ -64,6 +75,13 @@
             </div>
         </div>
     </nav>
+    {{#if messages.success}}
+    <div class="alert alert-success" role="alert">
+        <div class="container">
+            {{messages.success}}
+        </div>
+    </div>
+    {{/if}}
 
     <div class="bg-image p-5 text-center shadow-1-strong rounded mb-5 text-black" style="
         background-image: url('https://pbs.twimg.com/media/F1SeoEVakAEUt9k?format=jpg&name=4096x4096');
@@ -113,14 +131,8 @@
             </div>
         </section>
     </div>
-{{!-- 
-      {{#if messages.success}}
-        <div class="alert alert-success" role="alert">
-          <div class="container">
-            {{messages.success}}
-          </div>
-        </div>
-      {{/if}} --}}
+
+
 
     <!-- MYPROJECT -->
     <div class="text-center mb-5 ">
@@ -139,8 +151,6 @@
                         <p class="card-text">{{this.content}}</p>
                     </div>
                     <div class="ms-3">
-                        {{!-- {{#if (getArrayElement this.technologies 0)}}
-                         --}}
                         {{#if this.js}}
                         <i class="fa-brands fa-square-js fa-lg"></i>
                         {{/if}}
@@ -155,8 +165,10 @@
                         {{/if}}
                     </div>
                     <div class="d-flex justify-content-center my-4">
+                        {{#if this.isLogin}}
                         <a class="btn btn-dark me-3" href="/edit-blog/{{this.id}}">Edit</a>
                         <a class="btn btn-dark" href="/delete/{{this.id}}">Delete</a>
+                        {{/if}}
                     </div>
                     <div class="card-footer">
                         <small class="text-body-secondary">Duration: {{this.duration}} | {{this.author}}</small>
@@ -166,7 +178,6 @@
             {{/each}}
         </div>
     </div>
-    <!-- <script src="js/navbar.js"></script> -->
 </body>
 
 </html>

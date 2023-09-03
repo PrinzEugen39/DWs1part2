@@ -4,14 +4,13 @@ const PORT = 5000;
 const path = require("path");
 const moment= require("moment")
 const bcrypt = require("bcrypt");
-// const session = require("express-session");
-// const flash = require("express-flash");
+const session = require("express-session");
+const flash = require("express-flash");
 const upload = require("./src/middleware/uploadFiles");
 
 //sequelize init
 const config = require("./src/config/config.json");
 const { Sequelize, QueryTypes } = require("sequelize");
-const { type } = require("os");
 const sequelize = new Sequelize(config.development);
 
 
@@ -23,6 +22,20 @@ app.use(express.static(path.join(__dirname, "src/assets")));
 app.use(express.static(path.join(__dirname, "src/uploads")));
 //parsing data from client
 app.use(express.urlencoded({ extended: false }));
+//setup flash
+app.use(flash())
+//setup session
+app.use(session({
+  cookie: {
+    httpOnly: true,
+    secure: false,
+    maxAge: 1000 * 60 * 60 * 4
+  },
+  store: new session.MemoryStore(),
+  saveUninitialized: true,
+  resave: false,
+  secret: "secretValue"
+}))
 
 //GET routing
 app.get("/", home);
@@ -33,6 +46,7 @@ app.get("/edit-blog/:id", editBlog);
 app.get("/delete/:id", deleteBlog);
 app.get("/login", login);
 app.get("/register", register);
+app.get("/logout", logout);
 
 //POST routing
 app.post("/blog", upload.single('upload-image'),addBlog);
@@ -49,15 +63,20 @@ module.exports = app;
 //index
 async function home(req, res) {
   try {
-    const query = `SELECT * FROM "Blogs" ORDER BY id ASC`;
+    const query = `SELECT "Blogs".id, title, content, image, duration, js, nodejs, expressjs, reactjs, "Users".name AS author FROM "Blogs" LEFT JOIN "Users" ON "Blogs".author = "Users".id ORDER BY "Blogs".id ASC`;
     let obj = await sequelize.query(query, { type: QueryTypes.SELECT });
 
     const data = obj.map((res) => ({
       ...res,
-      author: "PrinzEugen39",
+      isLogin: req.session.isLogin,
+      user: req.session.user,
     }));
+    let loginCheck = {
+      isLogin: req.session.isLogin,
+      user: req.session.user
+    }
     // console.log(data);
-    res.render("index", { dataFake: data });
+    res.render("index", { dataFake: data, loginCheck });
   } catch (error) {
     console.log(error);
   }
@@ -65,7 +84,11 @@ async function home(req, res) {
 
 //project
 function blog(req, res) {
-  res.render("blog");
+  let loginCheck = {
+    isLogin: req.session.isLogin,
+    user: req.session.user
+  }
+  res.render("blog", { loginCheck });
 }
 
 //contact
@@ -79,10 +102,7 @@ async function addBlog(req, res) {
     const { title, content, startDate, endDate } = req.body;
     const image = req.file.filename;
 
-    const query = `INSERT INTO "Blogs" (title, content, image, duration, "startDate", "endDate", js, nodejs, expressjs, reactjs, "postAt", "createdAt", "updatedAt") VALUES ('${title}', '${content}', '${image}', '${dateDuration(
-      startDate,
-      endDate
-    )}','${startDate}', '${endDate}', :js, :nodejs, :expressjs, :reactjs, NOW(), NOW(), NOW())`;
+    const query = `INSERT INTO "Blogs" (title, content, image, duration, "startDate", "endDate", js, nodejs, expressjs, reactjs, "postAt", "createdAt", "updatedAt") VALUES ('${title}', '${content}', '${image}', '${dateDuration(startDate,endDate)}','${startDate}', '${endDate}', :js, :nodejs, :expressjs, :reactjs, NOW(), NOW(), NOW())`;
 
     await sequelize.query(query, {
       replacements : {
@@ -110,8 +130,13 @@ async function addBlog(req, res) {
           startDate: moment(res.startDate).format('YYYY-MM-DD'),
           endDate: moment(res.endDate).format('YYYY-MM-DD')
         }));
+                
+        let loginCheck = {
+          isLogin: req.session.isLogin,
+          user: req.session.user
+        }
 
-        res.render("edit-blog", { dataFake: data[0] });
+        res.render("edit-blog", { dataFake: data[0], loginCheck });
       } catch (error) {
         console.log(error);
       }
@@ -155,8 +180,12 @@ async function addBlog(req, res) {
             reactjs: req.body.reactjs ? true : false,
           }, type: QueryTypes.UPDATE
         });
-  
-        res.redirect("/");
+        
+        let loginCheck = {
+          isLogin: req.session.isLogin,
+          user: req.session.user
+        }
+        res.redirect("/", { loginCheck });
         
       } catch (error) {
         console.log(error);
@@ -167,14 +196,21 @@ async function addBlog(req, res) {
 async function blogcontent(req, res) {
   try {
     const { id } = req.params;
-    const query = `SELECT * FROM "Blogs" WHERE id=${id}`;
+    const query = `SELECT "Blogs".id, title, content, image, duration, js, nodejs, expressjs, reactjs, "Blogs"."createdAt", 
+    "Users".name AS author FROM "Blogs" 
+    LEFT JOIN "Users" ON "Blogs".author = "Users".id WHERE "Blogs".id=${id};`;
     let obj = await sequelize.query(query, { type: QueryTypes.SELECT });
 
     const data = obj.map((res) => ({
       ...res,
-      author: "PrinzEugen39",
+      isLogin: req.session.isLogin,
+      user: req.session.user,
     }));
-    res.render("blog-content", { dataFake: data[0] });
+    let loginCheck = {
+      isLogin: req.session.isLogin,
+      user: req.session.user
+    }
+    res.render("blog-content", { dataFake: data[0], loginCheck});
   } catch (error) {
     console.log(error);
   }
@@ -200,7 +236,23 @@ async function loginUser (req, res) {
     const { email, password } = req.body;
     const query = `SELECT * FROM "Users" WHERE email = '${email}'`
     let obj = await sequelize.query(query, { type: QueryTypes.SELECT })
-    console.log(obj)
+    console.log(obj);
+    //check if email is valid
+    if(!obj.length) {
+      req.flash("danger", "Please enter a valid email");
+      return res.redirect("login");
+    }
+    await bcrypt.compare(password, obj[0].password, (err, result) => {
+      if (!result) {
+        req.flash("danger", "Wrong password");
+        return res.redirect("login");
+      } else {
+        req.session.isLogin = true;
+        req.session.user = obj[0].name;
+        req.flash("success", "login success");
+        res.redirect("/")
+      }
+    })
   } catch (error) {
     console.log(error);
   }
@@ -228,6 +280,11 @@ async function registerUser(req, res) {
   }
 }
 
+function logout (req, res) {
+  req.session.destroy();
+  res.redirect("/");
+}
+
 const dateDuration = (startDate, endDate) => {
   let start = new Date(startDate);
   let end = new Date(endDate);
@@ -248,10 +305,3 @@ const dateDuration = (startDate, endDate) => {
     return `${day} Hari`;
   }
 };
-
-// arr.push()
-// const num = 9
-// const arr = [4, 6, 2, 3];
-
-// arr.push(num);
-// console.log(arr);

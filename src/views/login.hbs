@@ -44,35 +44,44 @@
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="/">Home</a>
                     </li>
+                    {{#if loginCheck.isLogin}}
                     <li class="nav-item">
                         <a class="nav-link" href="/blog">Add Project</a>
                     </li>
+                    {{/if}}
                 </ul>
                 <form class="d-flex" role="search">
                     <ul class="navbar-nav nav-underline me-3 mb-2 mb-lg-0">
+                        {{#if loginCheck.isLogin}}
                         <li class="nav-item">
+                            <a class="nav-link" href="#">Hello, {{loginCheck.user}}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="/logout">Logout</a>
+                        </li>
+                        {{else}}
+                            <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="/login">Login</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/register">Register</a>
-                        </li>
+                        {{/if}}
                         <li class="nav-item">
                             <a class="btn btn-dark" href="/contact">Contact Me</a>
                         </li>
                     </ul>
-                    
                 </form>
             </div>
         </div>
     </nav>
 
-    {{!-- {{#if messages.danger}}
+    {{#if messages.danger}}
       <div class="alert alert-danger" role="alert">
         <div class="container">
           {{messages.danger}}
         </div>
       </div>
-    {{/if}} --}}
+    {{/if}}
 
     <!-- FORM -->
     <div class="container my-5 justify-content-center" style="width: 40%;">
