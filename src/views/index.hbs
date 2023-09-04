@@ -31,6 +31,16 @@
 </head>
 
 <body>
+{{#if messages.success}}
+<div class="z-2 position-absolute d-flex justify-content-end" style="right: 50rem; top: 3rem;" id="alertBox">
+    <div class="alert alert-success alert-dismissible" role="alert" id="alertBox">
+        <div class="container">
+            <h5>{{messages.success}}</h5>
+            <button type="button" class="btn-close" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+{{/if}}
 
     <nav class="navbar navbar-expand-lg bg-danger-subtle position-sticky top-0" style="z-index: 1;">
         <div class="container ">
@@ -75,13 +85,7 @@
             </div>
         </div>
     </nav>
-    {{#if messages.success}}
-    <div class="alert alert-success" role="alert">
-        <div class="container">
-            {{messages.success}}
-        </div>
-    </div>
-    {{/if}}
+
 
     <div class="bg-image p-5 text-center shadow-1-strong rounded mb-5 text-black" style="
         background-image: url('https://pbs.twimg.com/media/F1SeoEVakAEUt9k?format=jpg&name=4096x4096');

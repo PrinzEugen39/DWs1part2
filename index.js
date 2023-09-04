@@ -63,14 +63,30 @@ module.exports = app;
 //index
 async function home(req, res) {
   try {
-    const query = `SELECT "Blogs".id, title, content, image, duration, js, nodejs, expressjs, reactjs, "Users".name AS author FROM "Blogs" LEFT JOIN "Users" ON "Blogs".author = "Users".id ORDER BY "Blogs".id ASC`;
-    let obj = await sequelize.query(query, { type: QueryTypes.SELECT });
+    let query = "";
+    let obj = "";
+    let data = "";
 
-    const data = obj.map((res) => ({
-      ...res,
-      isLogin: req.session.isLogin,
-      user: req.session.user,
-    }));
+    if (req.session.idUser){
+      query = `SELECT "Blogs".id, title, content, image, duration, js, nodejs, expressjs, reactjs, "Users".name AS author FROM "Blogs" LEFT JOIN "Users" ON "Blogs".author = "Users".id WHERE "Users".id = :idUser ORDER BY "Blogs".id DESC`;
+      obj = await sequelize.query(query, { type: QueryTypes.SELECT,
+        replacements: {
+          idUser: req.session.idUser,
+        }});    
+        data = obj.map((res) => ({
+          ...res,
+          isLogin: req.session.isLogin,
+          user: req.session.user,
+        }));
+    } else {
+      query = `SELECT "Blogs".id, title, content, image, duration, js, nodejs, expressjs, reactjs, "Users".name AS author FROM "Blogs" LEFT JOIN "Users" ON "Blogs".author = "Users".id ORDER BY "Blogs".id DESC`;
+      obj = await sequelize.query(query, { type: QueryTypes.SELECT,});  
+      data = obj.map((res) => ({
+        ...res,
+        isLogin: req.session.isLogin,
+        user: req.session.user,
+      }));  
+    }
     let loginCheck = {
       isLogin: req.session.isLogin,
       user: req.session.user
@@ -101,8 +117,9 @@ async function addBlog(req, res) {
   try {
     const { title, content, startDate, endDate } = req.body;
     const image = req.file.filename;
+    const author = req.session.idUser;
 
-    const query = `INSERT INTO "Blogs" (title, content, image, duration, "startDate", "endDate", js, nodejs, expressjs, reactjs, "postAt", "createdAt", "updatedAt") VALUES ('${title}', '${content}', '${image}', '${dateDuration(startDate,endDate)}','${startDate}', '${endDate}', :js, :nodejs, :expressjs, :reactjs, NOW(), NOW(), NOW())`;
+    const query = `INSERT INTO "Blogs" (title, content, image, duration, "startDate", "endDate", js, nodejs, expressjs, reactjs, "postAt", "createdAt", "updatedAt", author) VALUES ('${title}', '${content}', '${image}', '${dateDuration(startDate,endDate)}','${startDate}', '${endDate}', :js, :nodejs, :expressjs, :reactjs, NOW(), NOW(), NOW(), ${author})`;
 
     await sequelize.query(query, {
       replacements : {
@@ -121,12 +138,18 @@ async function addBlog(req, res) {
 //edit blog
     async function editBlog(req, res) {
       try {
+        if (!req.session.isLogin) {
+          res.redirect("/login");
+          return;
+        }
         const { id } = req.params;
         const query = `SELECT * FROM "Blogs" WHERE id=${id}`;
         let obj = await sequelize.query(query, { type: QueryTypes.SELECT });
 
         const data = obj.map((res) => ({
           ...res,
+          isLogin: req.session.isLogin,
+          user: req.session.user,
           startDate: moment(res.startDate).format('YYYY-MM-DD'),
           endDate: moment(res.endDate).format('YYYY-MM-DD')
         }));
@@ -180,13 +203,7 @@ async function addBlog(req, res) {
             reactjs: req.body.reactjs ? true : false,
           }, type: QueryTypes.UPDATE
         });
-        
-        let loginCheck = {
-          isLogin: req.session.isLogin,
-          user: req.session.user
-        }
-        res.redirect("/", { loginCheck });
-        
+        res.redirect("/");
       } catch (error) {
         console.log(error);
       }
@@ -248,7 +265,9 @@ async function loginUser (req, res) {
         return res.redirect("login");
       } else {
         req.session.isLogin = true;
+        req.session.idUser = obj[0].id;
         req.session.user = obj[0].name;
+        console.log(req.session.idUser);
         req.flash("success", "login success");
         res.redirect("/")
       }
@@ -266,23 +285,32 @@ async function registerUser(req, res) {
   try {
     const { name, email, password } = req.body;
     const salt = 10;
-    // if(email.length != 0) {
-    //   return alert ("email sudah ada")
-    // }
+    // checking email
+    const query = `SELECT * FROM "Users" WHERE email='${email}'`;
+    let obj = await sequelize.query(query, { type: QueryTypes.SELECT });
 
-    await bcrypt.hash(password, salt, (err, hashPw) => {
-      const query = `INSERT INTO "Users" (name, email, password, "createdAt", "updatedAt") VALUES ('${name}', '${email}', '${hashPw}', NOW(), NOW())`
-      sequelize.query(query)
-    });
-    // await console.log(name, email, pw);
+    if (obj.length) {
+      req.flash("danger", "Email has already exists");
+      res.redirect("/register");
+    } else {
+          await bcrypt.hash(password, salt, (err, hashPw) => {
+            const query = `INSERT INTO "Users" (name, email, password, "createdAt", "updatedAt") VALUES ('${name}', '${email}', '${hashPw}', NOW(), NOW())`
+            sequelize.query(query)
+          });
+          res.redirect("login")
+    }
   } catch (error) {
     console.log(error);
   }
 }
 
 function logout (req, res) {
-  req.session.destroy();
-  res.redirect("/");
+  req.session.destroy((err) => {
+    if (err) {
+      console.log(err);
+    }
+    res.redirect("/");
+  });
 }
 
 const dateDuration = (startDate, endDate) => {

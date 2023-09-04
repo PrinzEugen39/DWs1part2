@@ -19,15 +19,6 @@
 </head>
 
 <body>
-  {{!-- <style>
-    body {
-      background-image: url("https://pbs.twimg.com/media/F1SeoEVakAEUt9k?format=jpg&name=4096x4096");
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      background-size: cover;
-    }
-  </style> --}}
-
   <!-- NAV -->
     <nav class="navbar navbar-expand-lg bg-danger-subtle position-sticky top-0" style="z-index: 1;">
         <div class="container ">
@@ -73,39 +64,48 @@
         </div>
     </nav>
 
-
   <!-- ProjectDetail -->
-  <div class="container my-5">
-    <div class="blog-detail-container">
-      <h1>
-        {{dataFake.title}}
-      </h1>
-      <div class="author">Duration: {{dataFake.duration}} | {{dataFake.author}} </div>
-      <div class="my-3">
-        <img class="w-50" src="/image/Tianasquare.jpg" alt="detail" />
+<div class="bg-image p-5 text-center shadow-1-strong rounded mb-5 text-black" style="
+        background-image: url('https://pbs.twimg.com/media/F1SeoEVakAEUt9k?format=jpg&name=4096x4096');
+">    
+  <div class="container my-2 text-white p-3"
+  style="
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.85);
+    box-shadow: 0px 10px 10px 10px rgba(0, 0, 0, 0.2);">
+      <div class="blog-detail-container">
+        <h1>
+          {{dataFake.title}}
+        </h1>
+        <div class="author">Duration: {{dataFake.duration}} | author: {{dataFake.author}} </div>
+        <hr>
+        <div class="my-3 d-flex align-items-center">
+              <img class="w-50 img-fluid rounded" src="/{{dataFake.image}}" alt="detail"/>
+            <div class="ms-3">
+              <h2 class="fw-bold">Technologies</h2>
+              {{#if dataFake.js}}
+              <i class="fa-brands fa-square-js fa-lg"></i>
+              {{/if}}
+              {{#if dataFake.nodejs}}
+              <i class="fa-brands fa-node fa-lg"></i>
+              {{/if}}
+              {{#if dataFake.expressjs}}
+              <i class="fa-brands fa-html5 fa-lg"></i>
+              {{/if}}
+              {{#if dataFake.reactjs}}
+              <i class="fa-brands fa-react fa-lg"></i>
+              {{/if}}
+          </div>
+        </div>
+        <hr>
+        <p>
+          Posted at: {{dataFake.createdAt}}
+          <br>
+          <h5>{{dataFake.content}}</h5>
+        </p>
       </div>
-      <p>
-        {{dataFake.createdAt}}
-        <br>
-        {{dataFake.content}}
-      </p>
-      <div class="ms-3">
-        {{!-- {{#if (getArrayElement this.technologies 0)}}
-        --}}
-        {{#if dataFake.js}}
-        <i class="fa-brands fa-square-js fa-lg"></i>
-        {{/if}}
-        {{#if dataFake.nodejs}}
-        <i class="fa-brands fa-node fa-lg"></i>
-        {{/if}}
-        {{#if dataFake.expressjs}}
-        <i class="fa-brands fa-html5 fa-lg"></i>
-        {{/if}}
-        {{#if dataFake.reactjs}}
-        <i class="fa-brands fa-react fa-lg"></i>
-        {{/if}}
-      </div>
-    </div>
+  </div>
+</div>
 </body>
 
 </html>
